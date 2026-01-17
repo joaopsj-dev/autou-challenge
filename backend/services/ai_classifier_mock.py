@@ -6,13 +6,16 @@ def initialize_openai():
 
 def extract_sender_recipient(email_text):
     sender = None
+    sender_email = None
     recipient = None
+    recipient_email = None
+    
+    email_pattern = r'([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})'
     
     sender_patterns = [
         r'De:\s*([^\n<]+)',
         r'From:\s*([^\n<]+)',
         r'Remetente:\s*([^\n<]+)',
-        r'Emerson\s+da\s+Silva',
         r'At\.te,\s*([^\n]+)',
         r'Atenciosamente,\s*([^\n]+)',
     ]
@@ -28,16 +31,29 @@ def extract_sender_recipient(email_text):
     for pattern in sender_patterns:
         match = re.search(pattern, email_text, re.IGNORECASE)
         if match:
-            sender = match.group(1).strip()
+            sender_text = match.group(1).strip()
+            sender = re.sub(email_pattern, '', sender_text).strip('<> ')
+            email_match = re.search(email_pattern, sender_text)
+            if email_match:
+                sender_email = email_match.group(1)
             break
     
     for pattern in recipient_patterns:
         match = re.search(pattern, email_text, re.IGNORECASE)
         if match:
-            recipient = match.group(1).strip()
+            recipient_text = match.group(1).strip()
+            recipient = re.sub(email_pattern, '', recipient_text).strip('<> ')
+            email_match = re.search(email_pattern, recipient_text)
+            if email_match:
+                recipient_email = email_match.group(1)
             break
     
-    return sender, recipient
+    if not sender_email:
+        all_emails = re.findall(email_pattern, email_text)
+        if all_emails:
+            sender_email = all_emails[0]
+    
+    return sender, sender_email, recipient, recipient_email
 
 def classify_and_respond(email_text):
     keywords_produtivo = [
@@ -97,12 +113,14 @@ def classify_and_respond(email_text):
             response = "Obrigado pelo contato! Ficamos felizes em receber sua mensagem."
             confidence = "baixa"
     
-    sender, recipient = extract_sender_recipient(email_text)
+    sender, sender_email, recipient, recipient_email = extract_sender_recipient(email_text)
     
     return {
         "category": category,
         "response": response,
         "confidence": confidence,
         "sender": sender,
-        "recipient": recipient
+        "sender_email": sender_email,
+        "recipient": recipient,
+        "recipient_email": recipient_email
     }

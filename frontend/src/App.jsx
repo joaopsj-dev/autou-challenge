@@ -46,7 +46,9 @@ function App() {
       response: data.response,
       confidence: data.confidence,
       sender: data.sender,
+      sender_email: data.sender_email,
       recipient: data.recipient,
+      recipient_email: data.recipient_email,
       emailContent: emailContent.substring(0, 500),
       stats: data.stats
     };

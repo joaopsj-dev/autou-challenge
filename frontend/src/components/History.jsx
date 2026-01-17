@@ -1,4 +1,5 @@
 import React from 'react';
+import EmailButton from './EmailButton';
 
 const History = ({ history, onDelete, onClear }) => {
   if (history.length === 0) {
@@ -51,11 +52,17 @@ const History = ({ history, onDelete, onClear }) => {
               {item.sender && (
                 <div className="history-field">
                   <strong>De:</strong> {item.sender}
+                  {item.sender_email && (
+                    <span className="email-display"> ({item.sender_email})</span>
+                  )}
                 </div>
               )}
               {item.recipient && (
                 <div className="history-field">
                   <strong>Para:</strong> {item.recipient}
+                  {item.recipient_email && (
+                    <span className="email-display"> ({item.recipient_email})</span>
+                  )}
                 </div>
               )}
               <div className="history-field">
@@ -71,6 +78,16 @@ const History = ({ history, onDelete, onClear }) => {
                   Confiança: {item.confidence}
                 </span>
               </div>
+              
+              {item.sender_email && (
+                <div className="history-email-action">
+                  <EmailButton 
+                    senderEmail={item.sender_email}
+                    response={item.response}
+                    subject={`Re: ${item.category === 'Produtivo' ? 'Sua solicitação' : 'Sua mensagem'}`}
+                  />
+                </div>
+              )}
             </div>
           </div>
         ))}

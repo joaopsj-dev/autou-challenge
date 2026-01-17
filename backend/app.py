@@ -80,7 +80,9 @@ def classify_email():
             'response': result['response'],
             'confidence': result.get('confidence', 'média'),
             'sender': result.get('sender'),
+            'sender_email': result.get('sender_email'),
             'recipient': result.get('recipient'),
+            'recipient_email': result.get('recipient_email'),
             'email_content': email_text[:500],
             'stats': {
                 'original_length': len(email_text),

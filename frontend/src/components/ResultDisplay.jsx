@@ -1,4 +1,5 @@
 import React from 'react';
+import EmailButton from './EmailButton';
 
 const ResultDisplay = ({ result }) => {
   if (!result) return null;
@@ -17,13 +18,23 @@ const ResultDisplay = ({ result }) => {
           {result.sender && (
             <div className="participant-field">
               <label>De:</label>
-              <span>{result.sender}</span>
+              <span>
+                {result.sender}
+                {result.sender_email && (
+                  <span className="email-display"> ({result.sender_email})</span>
+                )}
+              </span>
             </div>
           )}
           {result.recipient && (
             <div className="participant-field">
               <label>Para:</label>
-              <span>{result.recipient}</span>
+              <span>
+                {result.recipient}
+                {result.recipient_email && (
+                  <span className="email-display"> ({result.recipient_email})</span>
+                )}
+              </span>
             </div>
           )}
         </div>
@@ -47,6 +58,12 @@ const ResultDisplay = ({ result }) => {
           {result.response}
         </div>
       </div>
+
+      <EmailButton 
+        senderEmail={result.sender_email}
+        response={result.response}
+        subject={`Re: ${result.category === 'Produtivo' ? 'Sua solicitação' : 'Sua mensagem'}`}
+      />
 
       {result.stats && (
         <div className="result-stats">

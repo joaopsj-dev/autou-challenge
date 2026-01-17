@@ -45,11 +45,18 @@ Responda APENAS com um JSON válido no formato:
   "response": "texto da resposta automática apropriada ao contexto",
   "confidence": "alta", "média" ou "baixa",
   "sender": "nome do remetente se identificável, ou null",
-  "recipient": "nome do destinatário se identificável, ou null"
+  "sender_email": "email do remetente se identificável, ou null",
+  "recipient": "nome do destinatário se identificável, ou null",
+  "recipient_email": "email do destinatário se identificável, ou null"
 }"""
 
     user_prompt = f"""Analise o seguinte email e forneça a classificação e resposta.
-Tente também identificar o remetente (quem enviou) e destinatário (para quem foi enviado) se estiverem mencionados no texto.
+
+IMPORTANTE: Extraia as seguintes informações se disponíveis no texto:
+- Nome do remetente (quem enviou)
+- Email do remetente (formato: usuario@dominio.com)
+- Nome do destinatário (para quem foi enviado)
+- Email do destinatário (formato: usuario@dominio.com)
 
 EMAIL:
 {email_text}
@@ -91,8 +98,14 @@ Lembre-se de responder APENAS com o JSON solicitado."""
         if 'sender' not in result:
             result['sender'] = None
         
+        if 'sender_email' not in result:
+            result['sender_email'] = None
+        
         if 'recipient' not in result:
             result['recipient'] = None
+        
+        if 'recipient_email' not in result:
+            result['recipient_email'] = None
         
         return result
         
