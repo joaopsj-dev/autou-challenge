@@ -1,0 +1,72 @@
+{
+  "info": {
+    "name": "Email Classifier API",
+    "description": "API para classificação de emails usando IA",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Classificar Email - Texto",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "text",
+              "value": "Prezados, estou com um problema urgente no sistema de pagamentos. Preciso de suporte técnico imediato.",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/classify",
+          "host": ["{{base_url}}"],
+          "path": ["api", "classify"]
+        }
+      }
+    },
+    {
+      "name": "Classificar Email - Arquivo",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/path/to/email.txt"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/classify",
+          "host": ["{{base_url}}"],
+          "path": ["api", "classify"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ]
+}
