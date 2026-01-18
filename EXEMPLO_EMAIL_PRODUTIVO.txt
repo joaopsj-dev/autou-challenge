@@ -1,0 +1,20 @@
+De: Maria Santos <maria.santos@techcorp.com.br>
+Para: Carlos Oliveira <carlos.oliveira@empresa.com.br>
+Assunto: Urgente - Sistema de Pagamentos Offline
+
+Prezado Carlos, bom dia.
+
+Estou entrando em contato pois estamos enfrentando um problema crítico no sistema de pagamentos desde as 08h30 de hoje. 
+
+Vários clientes já reportaram que não conseguem finalizar suas compras, aparecendo a mensagem de erro "Timeout de Conexão" ao tentar processar o pagamento.
+
+Já tentei reiniciar o serviço conforme documentação, mas o problema persiste. O log mostra erro 500 nas requisições para o gateway de pagamento.
+
+Preciso urgentemente de suporte técnico para resolver esta questão, pois está impactando diretamente nossas vendas e a experiência dos clientes.
+
+Poderia me ajudar a identificar a causa e resolver o mais rápido possível?
+
+Atenciosamente,
+Maria Santos
+Analista de TI
+TechCorp Solutions
