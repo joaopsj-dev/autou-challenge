@@ -5,6 +5,7 @@ import FileUpload from './components/FileUpload';
 import LoadingSpinner from './components/LoadingSpinner';
 import ResultDisplay from './components/ResultDisplay';
 import History from './components/History';
+import ConfirmModal from './components/ConfirmModal';
 import { classifyEmail, checkHealth } from './services/api';
 
 const HISTORY_KEY = 'email_classifier_history';
@@ -18,6 +19,7 @@ function App() {
   const [serverStatus, setServerStatus] = useState('checking');
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [showClearModal, setShowClearModal] = useState(false);
 
   useEffect(() => {
     checkHealth()
@@ -65,10 +67,9 @@ function App() {
   };
 
   const clearHistory = () => {
-    if (window.confirm('Tem certeza que deseja limpar todo o histórico?')) {
-      setHistory([]);
-      localStorage.removeItem(HISTORY_KEY);
-    }
+    setHistory([]);
+    localStorage.removeItem(HISTORY_KEY);
+    setShowClearModal(false);
   };
 
   const handleSubmit = async (e) => {
@@ -144,7 +145,7 @@ function App() {
             <History 
               history={history}
               onDelete={deleteHistoryItem}
-              onClear={clearHistory}
+              onClear={() => setShowClearModal(true)}
               onBack={() => setShowHistory(false)}
             />
           ) : (
@@ -233,6 +234,14 @@ function App() {
         </p>
         <p className="footer-secondary">Desenvolvido para o Desafio AutoU | Powered by OpenAI GPT</p>
       </footer>
+
+      <ConfirmModal
+        isOpen={showClearModal}
+        onClose={() => setShowClearModal(false)}
+        onConfirm={clearHistory}
+        title="🗑️ Limpar Histórico"
+        message="Tem certeza que deseja limpar todo o histórico de classificações? Esta ação não pode ser desfeita."
+      />
     </div>
   );
 }
