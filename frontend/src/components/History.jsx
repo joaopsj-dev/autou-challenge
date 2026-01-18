@@ -1,12 +1,18 @@
 import React from 'react';
 import EmailButton from './EmailButton';
 
-const History = ({ history, onDelete, onClear }) => {
+const History = ({ history, onDelete, onClear, onBack }) => {
   if (history.length === 0) {
     return (
       <div className="history-container empty">
-        <h2>📜 Histórico de Classificações</h2>
+        <div className="empty-header">
+          <button className="btn-back-inline" onClick={onBack}>
+            ← Voltar
+          </button>
+          <h2>📜 Histórico de Classificações</h2>
+        </div>
         <p className="empty-message">Nenhuma classificação realizada ainda.</p>
+        <p className="empty-hint">Classifique seu primeiro email para vê-lo aqui!</p>
       </div>
     );
   }
@@ -25,9 +31,14 @@ const History = ({ history, onDelete, onClear }) => {
   return (
     <div className="history-container">
       <div className="history-header">
-        <h2>📜 Histórico de Classificações</h2>
+        <div className="history-title-group">
+          <button className="btn-back-inline" onClick={onBack} title="Voltar para classificação">
+            ← Voltar
+          </button>
+          <h2>📜 Histórico de Classificações ({history.length})</h2>
+        </div>
         <button className="btn-clear-history" onClick={onClear}>
-          Limpar Histórico
+          🗑️ Limpar Tudo
         </button>
       </div>
 
@@ -42,7 +53,7 @@ const History = ({ history, onDelete, onClear }) => {
               <button 
                 className="btn-delete-item"
                 onClick={() => onDelete(item.id)}
-                title="Remover"
+                title="Remover este item"
               >
                 🗑️
               </button>

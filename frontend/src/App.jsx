@@ -117,12 +117,21 @@ function App() {
               {serverStatus === 'online' && 'Servidor Online'}
               {serverStatus === 'offline' && 'Servidor Offline'}
             </div>
-            <button 
-              className="btn-history"
-              onClick={() => setShowHistory(!showHistory)}
-            >
-              📜 Histórico ({history.length})
-            </button>
+            {!showHistory ? (
+              <button 
+                className="btn-history"
+                onClick={() => setShowHistory(true)}
+              >
+                📜 Ver Histórico ({history.length})
+              </button>
+            ) : (
+              <button 
+                className="btn-back"
+                onClick={() => setShowHistory(false)}
+              >
+                ← Voltar para Classificação
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -134,6 +143,7 @@ function App() {
               history={history}
               onDelete={deleteHistoryItem}
               onClear={clearHistory}
+              onBack={() => setShowHistory(false)}
             />
           ) : (
             <>
