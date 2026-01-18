@@ -9,6 +9,7 @@ def initialize_openai():
     api_key = os.getenv('OPENAI_API_KEY')
     if not api_key:
         raise ValueError('OPENAI_API_KEY não encontrada nas variáveis de ambiente')
+    
     client = OpenAI(api_key=api_key)
 
 def classify_and_respond(email_text):
