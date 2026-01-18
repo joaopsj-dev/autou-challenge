@@ -89,8 +89,10 @@ function App() {
       const response = await classifyEmail(data);
       setResult(response);
       
-      const content = selectedFile ? selectedFile.name : emailText;
-      saveToHistory(response, content);
+      if (response.category !== 'Spam') {
+        const content = selectedFile ? selectedFile.name : emailText;
+        saveToHistory(response, content);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -165,6 +167,11 @@ function App() {
                     <span className="icon">💬</span>
                     <h3>Improdutivo</h3>
                     <p>Emails que não necessitam ação imediata</p>
+                  </div>
+                  <div className="category-card spam">
+                    <span className="icon">⚠️</span>
+                    <h3>Spam</h3>
+                    <p>Emails suspeitos, fraudulentos ou indesejados (não são salvos no histórico)</p>
                   </div>
                 </div>
               </div>

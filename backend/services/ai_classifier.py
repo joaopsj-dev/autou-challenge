@@ -19,9 +19,21 @@ def classify_and_respond(email_text):
 
 INSTRUÇÕES DE CLASSIFICAÇÃO:
 
-PRODUTIVO - Emails que REQUEREM ação, resposta ou decisão:
+SPAM - Emails suspeitos, fraudulentos ou indesejados (PRIORIDADE MÁXIMA):
+✓ Promessas de dinheiro fácil, prêmios, loteria
+✓ Phishing (tentativas de roubo de dados/senha)
+✓ Links suspeitos ou encurtados sem contexto
+✓ Ofertas "bom demais para ser verdade"
+✓ Erros gramaticais excessivos em contexto comercial
+✓ Urgência exagerada ("Clique agora!", "Última chance!")
+✓ Vendas não solicitadas agressivas
+✓ Correntes, pirâmides, esquemas
+✓ Emails de bancos/serviços pedindo senha ou dados sensíveis
+✓ Remetentes desconhecidos com propostas suspeitas
+
+PRODUTIVO - Emails legítimos que REQUEREM ação, resposta ou decisão:
 ✓ Solicitações de informações específicas
-✓ Ofertas de trabalho, vagas, oportunidades
+✓ Ofertas de trabalho, vagas, oportunidades LEGÍTIMAS
 ✓ Pedidos que exigem resposta com dados/documentos
 ✓ Suporte técnico, problemas, erros, bugs
 ✓ Dúvidas sobre processos, sistemas, serviços
@@ -31,18 +43,21 @@ PRODUTIVO - Emails que REQUEREM ação, resposta ou decisão:
 ✓ Emails com lista de perguntas a responder
 ✓ Qualquer email que termine esperando uma resposta ou ação
 
-IMPRODUTIVO - Emails que NÃO requerem ação imediata:
+IMPRODUTIVO - Emails legítimos que NÃO requerem ação imediata:
 ✓ Felicitações (aniversário, natal, ano novo)
 ✓ Agradecimentos simples sem perguntas
 ✓ Mensagens sociais/cordialidades
 ✓ Avisos informativos sem ação necessária
 
-ATENÇÃO: Se o email pede informações, dados, resposta a perguntas ou qualquer tipo de ação → SEMPRE classificar como PRODUTIVO.
+ATENÇÃO: 
+1. Se o email parece SPAM → classificar como "Spam"
+2. Se o email pede informações/ação legítima → classificar como "Produtivo"
+3. Caso contrário → classificar como "Improdutivo"
 
 Responda APENAS com um JSON válido no formato:
 {
-  "category": "Produtivo" ou "Improdutivo",
-  "response": "texto da resposta automática apropriada ao contexto",
+  "category": "Spam", "Produtivo" ou "Improdutivo",
+  "response": "texto da resposta apropriada (se Spam, avisar sobre o risco)",
   "confidence": "alta", "média" ou "baixa",
   "sender": "nome do remetente se identificável, ou null",
   "sender_email": "email do remetente se identificável, ou null",
@@ -89,7 +104,7 @@ Lembre-se de responder APENAS com o JSON solicitado."""
         if 'category' not in result or 'response' not in result:
             raise ValueError('Resposta da IA não contém campos necessários')
         
-        if result['category'] not in ['Produtivo', 'Improdutivo']:
+        if result['category'] not in ['Spam', 'Produtivo', 'Improdutivo']:
             raise ValueError('Categoria inválida retornada pela IA')
         
         if 'confidence' not in result:

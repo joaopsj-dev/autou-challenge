@@ -4,11 +4,12 @@ Sistema inteligente de classificação de emails desenvolvido para automatizar a
 
 ## 🎯 Objetivo
 
-Automatizar a leitura e classificação de emails em duas categorias principais:
+Automatizar a leitura e classificação de emails em três categorias principais:
+- **Spam**: Emails suspeitos, fraudulentos ou indesejados (não salvos no histórico)
 - **Produtivo**: Emails que requerem ação ou resposta específica
 - **Improdutivo**: Emails que não necessitam ação imediata
 
-O sistema também gera respostas automáticas adequadas para cada categoria identificada.
+O sistema também gera respostas automáticas adequadas para cada categoria identificada e protege o usuário contra emails maliciosos.
 
 ## 🚀 Tecnologias Utilizadas
 
@@ -150,9 +151,10 @@ A aplicação estará disponível em `http://localhost:3000`
    - Faça upload de um arquivo (.txt ou .pdf)
 3. **Clique em "Classificar Email"**
 4. **Visualize o resultado**:
-   - Categoria (Produtivo/Improdutivo)
-   - Resposta automática sugerida
+   - Categoria (Spam/Produtivo/Improdutivo)
+   - Resposta automática sugerida (ou aviso de segurança se for spam)
    - Estatísticas da análise
+   - **Nota**: Emails identificados como spam não são salvos no histórico por questões de segurança
 
 ## 🔄 Fluxo de Funcionamento
 
@@ -206,6 +208,23 @@ Clique em **Create Web Service**. O Render fará o build e deploy automaticament
 
 ## 🧪 Exemplos de Teste
 
+### Email Spam
+```
+De: Promoções Incríveis <sorteio.premios.2026@outlook-mail.tk>
+Para: João Pedro <joaopsj007@gmail.com>
+Assunto: 🎉 PARABÉNS! Você Ganhou R$ 50.000,00! 🎉
+
+PARABÉNS! Você foi SELECIONADO como o grande vencedor!
+Você ganhou o prêmio de R$ 50.000,00!
+
+Para receber, você precisa:
+1. CLICAR AQUI IMEDIATAMENTE
+2. Preencher seus dados bancários completos
+3. Informar sua senha do banco
+
+⚠️ ATENÇÃO: Válido APENAS HOJE!
+```
+
 ### Email Produtivo
 ```
 Prezados,
@@ -236,11 +255,18 @@ Maria Santos
 - Limite de tamanho de arquivo (5MB)
 - Sanitização de inputs
 - CORS configurado adequadamente
+- **Detecção automática de spam e phishing**
+- **Emails maliciosos não são salvos no histórico**
+- **Alertas visuais para emails suspeitos**
 
 ## 📊 Funcionalidades Principais
 
-✅ Classificação automática em Produtivo/Improdutivo  
+✅ **Detecção automática de spam e emails maliciosos**  
+✅ Classificação automática em Spam/Produtivo/Improdutivo  
 ✅ Geração de respostas automáticas contextualizadas  
+✅ Alertas de segurança para emails suspeitos  
+✅ Histórico de classificações (exceto spam)  
+✅ Envio de respostas via Gmail  
 ✅ Suporte para texto direto e upload de arquivos  
 ✅ Interface moderna e responsiva  
 ✅ Drag-and-drop para upload de arquivos  
@@ -258,6 +284,16 @@ O sistema utiliza técnicas de NLP para:
 
 ## 🎯 Categorias de Classificação
 
+### Spam (Prioridade Máxima)
+Emails suspeitos, fraudulentos ou indesejados:
+- Phishing e tentativas de roubo de dados
+- Promessas de dinheiro fácil ou prêmios
+- Pedidos de senha ou dados bancários
+- Links suspeitos e ofertas "bom demais para ser verdade"
+- Urgência exagerada e vendas agressivas não solicitadas
+- Correntes, pirâmides e esquemas fraudulentos
+- **Importante**: Não são salvos no histórico por segurança
+
 ### Produtivo
 Emails que indicam necessidade de ação:
 - Solicitações de suporte técnico
@@ -265,6 +301,7 @@ Emails que indicam necessidade de ação:
 - Atualização sobre casos em aberto
 - Problemas e erros
 - Requisições urgentes
+- Ofertas legítimas de trabalho/estágio
 
 ### Improdutivo
 Emails sem necessidade de ação imediata:

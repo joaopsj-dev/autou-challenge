@@ -56,6 +56,17 @@ def extract_sender_recipient(email_text):
     return sender, sender_email, recipient, recipient_email
 
 def classify_and_respond(email_text):
+    keywords_spam = [
+        'ganhe dinheiro', 'dinheiro fácil', 'clique aqui', 'parabéns você ganhou',
+        'prêmio', 'loteria', 'você foi selecionado', 'oferta imperdível',
+        'confirme sua senha', 'atualize seus dados', 'conta bloqueada urgente',
+        'transferência internacional', 'herança', 'nigéria', 'príncipe',
+        'bitcoin grátis', 'criptomoeda', 'investimento garantido',
+        'apenas hoje', 'últimas vagas', 'clique imediatamente',
+        'verifique sua identidade', 'sua conta será suspensa',
+        'milhões de reais', 'renda extra trabalhando em casa'
+    ]
+    
     keywords_produtivo = [
         'urgente', 'problema', 'suporte', 'erro', 'ajuda', 'técnico',
         'bug', 'falha', 'dúvida', 'questão', 'solicitação', 'requisição',
@@ -75,43 +86,50 @@ def classify_and_respond(email_text):
     
     text_lower = email_text.lower()
     
-    has_questions = '?' in email_text
-    has_request = any(word in text_lower for word in ['peço', 'favor', 'solicito', 'preciso', 'necessário'])
-    has_form = text_lower.count('qual') >= 2 or text_lower.count('informe') >= 1
+    spam_count = sum(1 for k in keywords_spam if k in text_lower)
     
-    produtivo_count = sum(1 for k in keywords_produtivo if k in text_lower)
-    improdutivo_count = sum(1 for k in keywords_improdutivo if k in text_lower)
-    
-    if has_questions or has_request or has_form:
-        produtivo_count += 5
-    
-    if produtivo_count > improdutivo_count:
-        category = "Produtivo"
-        responses_produtivo = [
-            "Prezado(a), recebemos sua solicitação e nossa equipe técnica irá analisá-la em breve. Entraremos em contato com mais informações assim que possível. Agradecemos pela paciência.",
-            "Olá! Sua solicitação foi registrada com sucesso. Nossa equipe de suporte está trabalhando para resolver sua questão. Você receberá uma atualização em breve.",
-            "Caro(a) usuário(a), agradecemos por entrar em contato. Estamos analisando o problema reportado e retornaremos com uma solução o mais rápido possível.",
-        ]
-        response = random.choice(responses_produtivo)
-        confidence = "alta" if produtivo_count >= 3 else "média"
-    elif improdutivo_count > produtivo_count:
-        category = "Improdutivo"
-        responses_improdutivo = [
-            "Muito obrigado pela sua mensagem! Ficamos muito felizes com seu contato e desejamos tudo de bom. Um grande abraço da equipe!",
-            "Que mensagem gentil! Agradecemos imensamente suas palavras. Desejamos sucesso e felicidades para você também!",
-            "Olá! Obrigado por compartilhar esse momento conosco. Ficamos muito gratos pela sua mensagem. Um forte abraço!",
-        ]
-        response = random.choice(responses_improdutivo)
-        confidence = "alta" if improdutivo_count >= 2 else "média"
+    if spam_count >= 2:
+        category = "Spam"
+        response = "⚠️ ATENÇÃO: Este email foi identificado como SPAM. Não clique em links, não forneça dados pessoais e não responda a este remetente. Recomendamos excluir esta mensagem imediatamente."
+        confidence = "alta"
     else:
-        if len(email_text) > 100:
+        has_questions = '?' in email_text
+        has_request = any(word in text_lower for word in ['peço', 'favor', 'solicito', 'preciso', 'necessário'])
+        has_form = text_lower.count('qual') >= 2 or text_lower.count('informe') >= 1
+        
+        produtivo_count = sum(1 for k in keywords_produtivo if k in text_lower)
+        improdutivo_count = sum(1 for k in keywords_improdutivo if k in text_lower)
+        
+        if has_questions or has_request or has_form:
+            produtivo_count += 5
+        
+        if produtivo_count > improdutivo_count:
             category = "Produtivo"
-            response = "Prezado(a), recebemos sua mensagem. Nossa equipe está analisando o conteúdo e retornará em breve com uma resposta apropriada."
-            confidence = "média"
-        else:
+            responses_produtivo = [
+                "Prezado(a), recebemos sua solicitação e nossa equipe técnica irá analisá-la em breve. Entraremos em contato com mais informações assim que possível. Agradecemos pela paciência.",
+                "Olá! Sua solicitação foi registrada com sucesso. Nossa equipe de suporte está trabalhando para resolver sua questão. Você receberá uma atualização em breve.",
+                "Caro(a) usuário(a), agradecemos por entrar em contato. Estamos analisando o problema reportado e retornaremos com uma solução o mais rápido possível.",
+            ]
+            response = random.choice(responses_produtivo)
+            confidence = "alta" if produtivo_count >= 3 else "média"
+        elif improdutivo_count > produtivo_count:
             category = "Improdutivo"
-            response = "Obrigado pelo contato! Ficamos felizes em receber sua mensagem."
-            confidence = "baixa"
+            responses_improdutivo = [
+                "Muito obrigado pela sua mensagem! Ficamos muito felizes com seu contato e desejamos tudo de bom. Um grande abraço da equipe!",
+                "Que mensagem gentil! Agradecemos imensamente suas palavras. Desejamos sucesso e felicidades para você também!",
+                "Olá! Obrigado por compartilhar esse momento conosco. Ficamos muito gratos pela sua mensagem. Um forte abraço!",
+            ]
+            response = random.choice(responses_improdutivo)
+            confidence = "alta" if improdutivo_count >= 2 else "média"
+        else:
+            if len(email_text) > 100:
+                category = "Produtivo"
+                response = "Prezado(a), recebemos sua mensagem. Nossa equipe está analisando o conteúdo e retornará em breve com uma resposta apropriada."
+                confidence = "média"
+            else:
+                category = "Improdutivo"
+                response = "Obrigado pelo contato! Ficamos felizes em receber sua mensagem."
+                confidence = "baixa"
     
     sender, sender_email, recipient, recipient_email = extract_sender_recipient(email_text)
     
