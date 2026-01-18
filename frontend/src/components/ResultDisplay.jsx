@@ -5,13 +5,21 @@ const ResultDisplay = ({ result }) => {
   if (!result) return null;
 
   const isProdutivo = result.category === 'Produtivo';
+  const isSpam = result.category === 'Spam';
 
   return (
-    <div className={`result-container ${isProdutivo ? 'produtivo' : 'improdutivo'}`}>
+    <div className={`result-container ${isSpam ? 'spam' : isProdutivo ? 'produtivo' : 'improdutivo'}`}>
       <div className="result-header">
-        <span className="result-icon">{isProdutivo ? '⚡' : '💬'}</span>
+        <span className="result-icon">{isSpam ? '⚠️' : isProdutivo ? '⚡' : '💬'}</span>
         <h2>Resultado da Análise</h2>
       </div>
+
+      {isSpam && (
+        <div className="spam-warning">
+          <h3>🚨 Email Identificado como SPAM 🚨</h3>
+          <p>Este email não foi adicionado ao histórico por questões de segurança.</p>
+        </div>
+      )}
 
       {(result.sender || result.recipient) && (
         <div className="result-participants">
@@ -42,7 +50,7 @@ const ResultDisplay = ({ result }) => {
 
       <div className="result-category">
         <label>Categoria:</label>
-        <span className={`category-badge ${isProdutivo ? 'produtivo' : 'improdutivo'}`}>
+        <span className={`category-badge ${isSpam ? 'spam' : isProdutivo ? 'produtivo' : 'improdutivo'}`}>
           {result.category}
         </span>
         {result.confidence && (
@@ -53,17 +61,19 @@ const ResultDisplay = ({ result }) => {
       </div>
 
       <div className="result-response">
-        <label>Resposta Sugerida:</label>
+        <label>{isSpam ? 'Aviso de Segurança:' : 'Resposta Sugerida:'}</label>
         <div className="response-text">
           {result.response}
         </div>
       </div>
 
-      <EmailButton 
-        senderEmail={result.sender_email}
-        response={result.response}
-        subject={`Re: ${result.category === 'Produtivo' ? 'Sua solicitação' : 'Sua mensagem'}`}
-      />
+      {!isSpam && (
+        <EmailButton 
+          senderEmail={result.sender_email}
+          response={result.response}
+          subject={`Re: ${result.category === 'Produtivo' ? 'Sua solicitação' : 'Sua mensagem'}`}
+        />
+      )}
 
       {result.stats && (
         <div className="result-stats">
