@@ -218,7 +218,18 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>Desenvolvido para o Desafio AutoU | Powered by OpenAI GPT</p>
+        <p>
+          Feito por{' '}
+          <a 
+            href="https://www.linkedin.com/in/joaopsj-dev/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="footer-link"
+          >
+            João Pedro
+          </a>
+        </p>
+        <p className="footer-secondary">Desenvolvido para o Desafio AutoU | Powered by OpenAI GPT</p>
       </footer>
     </div>
   );
