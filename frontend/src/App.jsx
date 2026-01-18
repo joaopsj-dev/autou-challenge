@@ -189,6 +189,7 @@ function App() {
 
                 <FileUpload
                   onFileSelect={setSelectedFile}
+                  selectedFile={selectedFile}
                   disabled={loading || emailText.length > 0}
                 />
 

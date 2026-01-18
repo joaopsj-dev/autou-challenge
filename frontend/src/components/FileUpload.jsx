@@ -1,9 +1,18 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-const FileUpload = ({ onFileSelect, disabled }) => {
+const FileUpload = ({ onFileSelect, disabled, selectedFile: externalFile }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (externalFile === null) {
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  }, [externalFile]);
 
   const handleDragEnter = (e) => {
     e.preventDefault();
