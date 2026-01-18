@@ -108,7 +108,9 @@ function App() {
     <div className="App">
       <header className="app-header">
         <div className="header-content">
-          <h1>📧 Email Classifier</h1>
+          <h1>
+            <span className="email-icon">✉</span> Email Classifier
+          </h1>
           <p>Sistema Inteligente de Classificação de Emails</p>
           <div className="header-actions">
             <div className={`server-status ${serverStatus}`}>

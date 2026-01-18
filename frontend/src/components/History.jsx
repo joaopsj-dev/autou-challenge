@@ -35,7 +35,7 @@ const History = ({ history, onDelete, onClear, onBack }) => {
           <button className="btn-back-inline" onClick={onBack} title="Voltar para classificação">
             ← Voltar
           </button>
-          <h2>📜 Histórico de Classificações ({history.length})</h2>
+          <h2 style={{ color: '#10b981' }}>📜 Histórico de Classificações ({history.length})</h2>
         </div>
         <button className="btn-clear-history" onClick={onClear}>
           🗑️ Limpar Tudo
